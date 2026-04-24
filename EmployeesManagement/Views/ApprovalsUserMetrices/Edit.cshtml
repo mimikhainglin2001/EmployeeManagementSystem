@@ -1,0 +1,68 @@
+﻿@model EmployeesManagement.Models.ApprovalsUserMetrix
+
+@{
+    ViewData["Title"] = "Update User Matrix";
+}
+
+<div class="row">
+    <div class="col-xl-12 mx-auto">
+        <div class="card border-top border-0 border-4 border-info">
+            <div class="card-body">
+                <div class="border p-4 rounded">
+                    <div class="card-title d-flex align-items-center">
+                        <div>
+                            <i class="btn-xs bxs-user me-1 font-22 text-info"></i>
+                        </div>
+                        <h5 class="mb-0 text-info">Update User Matrix</h5>
+                    </div>
+
+                    <hr />
+                    <div class="col-md-12">
+                        <form asp-action="Edit">
+                            <div class="row g-3">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="Id" />
+                                <input type="hidden" asp-for="CreatedById" />
+                                <input type="hidden" asp-for="CreatedOn" />
+
+                                <div class="form-group col-md-6">
+                                    <label asp-for="UserId" class="control-label"></label>
+                                    <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+                                    <span asp-validation-for="UserId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label asp-for="DocumentTypeId" class="control-label"></label>
+                                    <select asp-for="DocumentTypeId" class="form-control" asp-items="ViewBag.DocumentTypeId"></select>
+                                    <span asp-validation-for="DocumentTypeId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label asp-for="WorkflowUserGroupId" class="control-label"></label>
+                                    <select asp-for="WorkflowUserGroupId" class="form-control" asp-items="ViewBag.WorkflowUserGroupId"></select>
+                                    <span asp-validation-for="WorkflowUserGroupId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
+                                    </label>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <a asp-action="Index" class="btn btn-warning float-start"><i class="bi bi-skip-backward-fill"></i> Back To List</a>
+                                        <button type="submit" class="btn btn-primary float-end"><i class="bi bi-save-fill"></i> Update User Matrix</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

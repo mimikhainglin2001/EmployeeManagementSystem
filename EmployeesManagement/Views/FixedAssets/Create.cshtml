@@ -1,0 +1,99 @@
+﻿@model EmployeesManagement.Models.FixedAsset
+
+@{
+    ViewData["Title"] = "Add Assets";
+}
+<div class="row">
+    <div class="col-xl-12 mx-auto">
+        <div class="card border-top border-0 border-4 border-info">
+            <div class="card-body">
+                <div class="border p-4 rounded">
+
+                    <div class="card-title d-flex align-items-center">
+                        <div>
+                            <i class="btn-xs bxs-user me-1 font-22 text-info"></i>
+                        </div>
+                        <h5 class="mb-0 text-info">Add New Fixed Asset</h5>
+                    </div>
+
+                    <hr />
+                    <div class="col-md-12">
+                        <form asp-action="Create" method="post" enctype="multipart/form-data">
+                            <div class="row g-3">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group col-md-6">
+                                    <label asp-for="AssetNo" class="control-label"></label>
+                                    <input asp-for="AssetNo" class="form-control" />
+                                    <span asp-validation-for="AssetNo" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label asp-for="Description" class="control-label"></label>
+                                    <input asp-for="Description" class="form-control" />
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label asp-for="CategoryId" class="control-label"></label>
+                                    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId">
+                                        <option value="">-- Select Category --</option>
+                                    </select>
+                                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label asp-for="SerialNo" class="control-label"></label>
+                                    <input asp-for="SerialNo" class="form-control" />
+                                    <span asp-validation-for="SerialNo" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label asp-for="Model" class="control-label"></label>
+                                    <input asp-for="Model" class="form-control" />
+                                    <span asp-validation-for="Model" class="text-danger"></span>
+                                </div>
+                                @* <div class="form-group col-md-6">
+                                    <label asp-for="StatusId" class="control-label"></label>
+                                    <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
+                                </div> *@
+                                <div class="form-group col-md-6">
+                                    <label asp-for="ResponsibleEmployeeId" class="control-label"></label>
+                                    <select asp-for="ResponsibleEmployeeId" class="form-control" asp-items="ViewBag.ResponsibleEmployeeId">
+                                        <option> Select Employee Name</option>
+                                    </select>
+                                </div>
+                               
+                                <div class="form-group">
+                                    <label asp-for="Photo" class="control-label"></label>
+                                    <input class="form-control" type="file" accept=".png,.jpg,.jpeg" id="photo" name="assetphoto" />
+
+                                    <span asp-validation-for="Photo" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Notes" class="control-label"></label>
+                                    <input asp-for="Notes" class="form-control" />
+                                    <span asp-validation-for="Notes" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="PurchaseDate" class="control-label"></label>
+                                    <input asp-for="PurchaseDate" class="form-control" />
+                                    <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+                                </div>
+                                
+                                <div class="form-group p-lg-5">
+                                    <div class="col-md-12">
+                                        <a asp-action="Index" class="btn btn-warning float-start"><i class="bi bi-skip-backward-fill"></i> Back to List</a>
+                                        <button type="submit" class="btn btn-primary float-end"><i class="bi bi-save-fill"></i> Register Asset </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

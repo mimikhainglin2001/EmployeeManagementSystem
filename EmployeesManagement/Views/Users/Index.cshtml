@@ -1,0 +1,112 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model IEnumerable<ApplicationUser>
+
+@{
+    ViewData["Title"] = "System Users";
+}
+<p>
+    <a asp-action="Create" class="btn btn-primary"><i class="fa fa-plus"></i> Add New Users</a>
+</p>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Users List</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        User Serial No
+                    </th>
+                    <th>
+                        Full Name
+                    </th>
+                    <th>
+                        Id No
+                    </th>
+                    <th>
+                        User Role
+                    </th>
+                    <th>
+                        User Email
+                    </th>
+                    <th>
+                        User Name
+                    </th>
+                    <th>
+                        User PhoneNo
+                    </th>
+                    
+           
+           
+                    <th>Actions</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NationalId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Role.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhoneNumber)
+                        </td>
+                        
+                        <td>
+                            <div class="input-group-lg">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+                                        Action
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-divider"></li>
+                                        <li class="dropdown-item">
+                                            <a asp-action="Edit" asp-route-id="@item.Id">
+                                                <i class="fa fa-edit text-primary"></i> Edit
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a asp-action="Details" asp-route-id="@item.Id">
+                                                <i class="fa fa-eye text-warning"></i> View
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a asp-action="Delete" asp-route-id="@item.Id">
+                                                <i class="fa fa-trash text-danger"></i> Delete
+                                            </a>
+                                        </li>
+                                        
+                                    </ul>
+
+                                </div>
+                            </div>
+
+
+
+
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

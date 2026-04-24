@@ -1,0 +1,92 @@
+﻿@model EmployeesManagement.Models.LeavePeriod
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Leave Period Details</h1>
+
+<div>
+    <div class="col-md-14">
+        <div class="row">
+            <div class="col-md-6">
+                <table id="example1" class="table table-bordered table-striped">
+                    <tr>
+                        <th class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <td class="col-sm-4">
+                            @Html.DisplayFor(model => model.Name)
+                        </td>
+                        <th class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Description)
+                        </th>
+                        <td class="col-sm-4">
+                            @Html.DisplayFor(model => model.Description)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.StartDate)
+                        </th>
+                        <td class="col-sm-4">
+                            @Html.DisplayFor(model => model.StartDate)
+                        </td>
+                        <th class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.EndDate)
+                        </th>
+                        <td class="col-sm-4">
+                            @Html.DisplayFor(model => model.EndDate)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Closed)
+                        </th>
+                        <td class="col-sm-4">
+                            @Html.DisplayFor(model => model.Closed)
+                        </td>
+                        <th class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Locked)
+                        </th>
+                        <td class="col-sm-4">
+                            @Html.DisplayFor(model => model.Locked)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.CreatedById)
+                        </th>
+                        <td class="col-sm-4">
+                            @Html.DisplayFor(model => model.CreatedById)
+                        </td>
+                        <th class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.CreatedOn)
+                        </th>
+                        <td class="col-sm-4">
+                            @Html.DisplayFor(model => model.CreatedOn)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.ModifiedById)
+                        </th>
+                        <td class="col-sm-4">
+                            @Html.DisplayFor(model => model.ModifiedById)
+                        </td>
+                        <th class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.ModifiedOn)
+                        </th>
+                        <td class="col-sm-4">
+                            @Html.DisplayFor(model => model.ModifiedOn)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>

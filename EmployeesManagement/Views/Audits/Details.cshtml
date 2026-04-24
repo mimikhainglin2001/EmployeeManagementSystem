@@ -1,0 +1,76 @@
+﻿@model EmployeesManagement.Models.Audit
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="col-md-14">
+    <div class="row">
+        <div class="col-md-6">
+            <table id="example1" class="table table-bordered table-striped">
+                <tr>
+                    
+                    <th class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.UserId)
+                    </th>
+                    <td class="col-sm-4">
+                        @Html.DisplayFor(model => model.User.FullName)
+                    </td>
+                    <th class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.AuditType)
+                    </th>
+                    <td class="col-sm-4">
+                        @Html.DisplayFor(model => model.AuditType)
+                    </td>
+                </tr>
+                <tr>
+                    <th class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.TableName)
+                    </th>
+                    <td class="col-sm-4">
+                        @Html.DisplayFor(model => model.TableName)
+                    </td>
+                    <th class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.DateTime)
+                    </th>
+                    <td class="col-sm-4">
+                        @Html.DisplayFor(model => model.DateTime)
+                    </td>
+                </tr>
+                <tr>
+                    <th class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.OldValues)
+                    </th>
+                    <td class="col-sm-4">
+                        @Html.DisplayFor(model => model.OldValues)
+                    </td>
+                    <th class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.NewValues)
+                    </th>
+                    <td class="col-sm-4">
+                        @Html.DisplayFor(model => model.NewValues)
+                    </td>
+                </tr>
+                <tr>
+                    <th class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.AffectedColumns)
+                    </th>
+                    <td class="col-sm-4">
+                        @Html.DisplayFor(model => model.AffectedColumns)
+                    </td>
+                    <th class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.PrimaryKey)
+                    </th>
+                    <td class="col-sm-4">
+                        @Html.DisplayFor(model => model.PrimaryKey)
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+

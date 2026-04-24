@@ -1,0 +1,191 @@
+﻿@{
+    ViewData["Title"] = "Employees";
+}
+
+<style>
+    #employeechart1,
+    #employeechart2,
+    #employeechart3,
+    #employeechart4,
+    #employeechart5,
+    #employeechart6,
+    #employeechart7,
+    #employeechart8 {
+        height: 350px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>150</h3>
+                <p>Total Employees</p>
+            </div>
+            <div class="icon"><i class="ion ion-bag"></i></div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>53</h3>
+                <p>Total Clients</p>
+            </div>
+            <div class="icon"><i class="ion ion-stats-bars"></i></div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>44</h3>
+                <p>Leave Applications</p>
+            </div>
+            <div class="icon"><i class="ion ion-person-add"></i></div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>65</h3>
+                <p>Total Assets</p>
+            </div>
+            <div class="icon"><i class="ion ion-pie-graph"></i></div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="row">
+    <div class="col-lg-3"><div class="card p-2"><div id="employeechart1"></div></div></div>
+    <div class="col-lg-3"><div class="card p-2"><div id="employeechart2"></div></div></div>
+    <div class="col-lg-3"><div class="card p-2"><div id="employeechart3"></div></div></div>
+    <div class="col-lg-3"><div class="card p-2"><div id="employeechart4"></div></div></div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-lg-3"><div class="card p-2"><div id="employeechart5"></div></div></div>
+    <div class="col-lg-3"><div class="card p-2"><div id="employeechart6"></div></div></div>
+    <div class="col-lg-3"><div class="card p-2"><div id="employeechart7"></div></div></div>
+    <div class="col-lg-3"><div class="card p-2"><div id="employeechart8"></div></div></div>
+</div>
+
+<!-- Highcharts -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+    // Chart 1
+    Highcharts.chart('employeechart1', {
+    chart: { type: 'pie' },
+    title: { text: 'Employees Composition' },
+    series: [{
+    data: [
+    { name: 'Male', y: 55 },
+    { name: 'Female', y: 30 },
+    { name: 'PWDs', y: 5 },
+    { name: 'Others', y: 10 }
+    ]
+    }]
+    });
+
+    // Chart 2
+    Highcharts.chart('employeechart2', {
+    chart: { type: 'pie' },
+    title: { text: 'Employees Distribution' },
+    series: [{
+    innerSize: '60%',
+    data: [
+    ['Male', 40],
+    ['Female', 35],
+    ['PWDs', 25]
+    ]
+    }]
+    });
+
+    // Chart 3
+    Highcharts.chart('employeechart3', {
+    chart: { type: 'pie' },
+    title: { text: 'Leave Applications' },
+    series: [{
+    data: [
+    ['James', 20],
+    ['Ian', 15],
+    ['Others', 65]
+    ]
+    }]
+    });
+
+    // Chart 4
+    Highcharts.chart('employeechart4', {
+    chart: { type: 'pie' },
+    title: { text: 'Employees Status' },
+    series: [{
+    data: [
+    ['Active', 70],
+    ['Inactive', 20],
+    ['On Leave', 10]
+    ]
+    }]
+    });
+
+    // Chart 5 (FIXED)
+    Highcharts.chart('employeechart5', {
+    chart: { type: 'column' },
+    title: { text: 'Employees by Gender' },
+    xAxis: {
+    categories: ['Male', 'Female']
+    },
+    yAxis: {
+    title: { text: 'Total Employees' }
+    },
+    series: [{
+    name: 'Employees',
+    data: [40, 50]
+    }]
+    });
+
+    // Chart 6 (FIXED)
+    Highcharts.chart('employeechart6', {
+    chart: { type: 'pie' },
+    title: { text: 'Leave Applications' },
+    series: [{
+    data: [
+    ['James', 60],
+    ['Mangi', 20],
+    ['Vincent', 20]
+    ]
+    }]
+    });
+
+    // Chart 7
+    Highcharts.chart('employeechart7', {
+    title: { text: 'Employees Leave Days' },
+    yAxis: { title: { text: 'Days' } },
+    series: [{
+    name: 'Employees',
+    data: [10, 20, 30, 25, 40]
+    }]
+    });
+
+    // Chart 8
+    Highcharts.chart('employeechart8', {
+    chart: { type: 'pie' },
+    title: { text: 'Employees Summary' },
+    series: [{
+    innerSize: '70%',
+    data: [
+    ['Male', 30],
+    ['Female', 30],
+    ['Others', 40]
+    ]
+    }]
+    });
+
+    });
+</script>

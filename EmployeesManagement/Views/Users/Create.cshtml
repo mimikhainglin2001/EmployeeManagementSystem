@@ -1,0 +1,101 @@
+﻿@model EmployeesManagement.ViewModels.UserViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="row">
+    <div class="col-xl-12 mx-auto">
+        <div class="card border-top border-0 border-4 border-info">
+            <div class="card-body">
+                <div class="border p-4 rounded">
+                    <div class="card-title d-flex align-items-center">
+                        <div>
+                            <i class="btn-xs bxs-user me-1 font-22 text-info"></i>
+                        </div>
+                        <h5 class="mb-0 text-info">Add New User</h5>
+                    </div>
+
+                    <hr />
+                    <div class="col-md-12">
+                        <form asp-action="Create">
+                            <div class="row g-3">
+                                @Html.AntiForgeryToken()
+
+                                <!-- ✅ SHOW ALL ERRORS CLEARLY -->
+                                <div asp-validation-summary="All" class="text-danger"></div>
+
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <label asp-for="FirstName"></label>
+                                        <input asp-for="FirstName" class="form-control" />
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label asp-for="MiddleName"></label>
+                                        <input asp-for="MiddleName" class="form-control" />
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label asp-for="LastName"></label>
+                                        <input asp-for="LastName" class="form-control" />
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label asp-for="Email"></label>
+                                        <input asp-for="Email" class="form-control" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label asp-for="PhoneNumber"></label>
+                                        <input asp-for="PhoneNumber" class="form-control" />
+                                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label asp-for="UserName"></label>
+                                        <input asp-for="UserName" class="form-control" />
+                                        <span asp-validation-for="UserName" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label asp-for="Password"></label>
+                                        <input asp-for="Password" type="password" class="form-control" />
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- ✅ FIXED ROLE DROPDOWN -->
+                                    <div class="col-md-6">
+                                        <label asp-for="RoleId"></label>
+                                        <select asp-for="RoleId" class="form-control" asp-items="ViewBag.RoleId">
+                                            <option value="">-- Select Role --</option>
+                                        </select>
+                                        <span asp-validation-for="RoleId" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+
+                                <br />
+
+                                <div class="form-group">
+                                    <a asp-action="Index" class="btn btn-danger">Back</a>
+                                    <button type="submit" class="btn btn-primary">Register User</button>
+                                </div>
+                            </div>
+                        
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

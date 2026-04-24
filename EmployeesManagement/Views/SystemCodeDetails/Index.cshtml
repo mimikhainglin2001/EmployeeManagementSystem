@@ -1,0 +1,131 @@
+﻿@model EmployeesManagement.ViewModels.SystemCodeDetailViewModel;
+
+@{
+    ViewData["Title"] = "System Code Details";
+}
+
+
+<div class="card">
+   
+    <div class="card-body">
+        <div class="col-md-12">
+            <form asp-action="Index" enctype="multipart/form-data" class="form-vertical">
+                <div class="row">
+                    <div class="form-group col-md-6 md-3">
+                        <label asp-for="Code" class="control-label">System Code</label>
+                        <input asp-for="Code" class="form-control" />
+                    </div>
+                    <div class="form-group col-md-6 md-3">
+                        <label asp-for="Description" class="control-label">Description</label>
+                        <input asp-for="Description" class="form-control" />
+                    </div>
+                  
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-success btn-block m-tb-10">
+                            <i class="fa fa-search"></i>Search
+                        </button>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-default btn-reset m-tb-10">
+                            <i class="fa fa-eraser"></i>Clear
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        <div class="mb-3 float-end">
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-file-plus-fill"></i> Add New System Code Detail
+            </a>
+        </div>
+    </div>
+   
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SystemCodeId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Code)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrderNo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedById)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedOn)
+                    </th>
+                   
+                    <th>Actions</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.SystemCodeDetails)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SystemCode.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedBy.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedOn)
+                        </td>
+                        <td>
+                            @* <div class="btn-group">
+                                <button type="button" class="btn btn-primary">
+                                    Actions
+                                </button>
+
+                                <button type="button"
+                                        class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false">
+                                    <span class="sr-only"></span>
+                                </button> *@
+
+                                @* <div class="dropdown-menu dropdown-menu-right"> *@
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+
+                                    @* <a asp-action="Details" asp-route-id="@item.Id" class="dropdown-item">
+                                        <i class="fas fa-eye"></i> View
+                                    </a> *@
+
+                                    @* <a asp-action="Delete" asp-route-id="@item.Id" class="dropdown-item">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </a> *@
+                            @*     </div>
+                            </div> *@
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

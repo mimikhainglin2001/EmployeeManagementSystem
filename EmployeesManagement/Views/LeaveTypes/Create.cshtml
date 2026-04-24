@@ -1,0 +1,49 @@
+﻿@model EmployeesManagement.Models.LeaveType
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<h4>Add New LeaveType</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+                </div>
+                <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Days" class="control-label"></label>
+                        <input asp-for="Days" class="form-control" />
+                        <span asp-validation-for="Days" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group p-lg-5">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary float-end"><i class="bi bi-save-fill"></i> Register Leave Types </button>
+                        <a asp-action="Index" class="btn btn-secondary"><i class="bi bi-skip-backward-fill"></i> Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

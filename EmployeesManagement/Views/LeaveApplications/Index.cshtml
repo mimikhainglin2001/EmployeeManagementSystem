@@ -1,0 +1,154 @@
+﻿@model IEnumerable<EmployeesManagement.Models.LeaveApplication>
+
+@{
+    ViewData["Title"] = "Leave Application";
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="mb-3 float-end">
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-file-plus-fill"></i> Add New Leave Application
+            </a>
+        </div>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Employee)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NoOfDays)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.StartDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EndDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Duration)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LeaveType)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedById)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedOn)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
+           
+           
+                    <th>Actions</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Employee.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NoOfDays)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EndDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Duration.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LeaveType.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedBy.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedOn)
+                        </td>
+            
+                        <td>
+                            @if (item.Status.Code == "Approved")
+                            {
+                                <span class="badge rounded-pill bg-success">
+                                    @Html.DisplayFor(modelItem => item.Status.Description)
+                                </span>
+                            }
+                            else if
+                           
+                                (item.Status.Code == "Rejected")
+                            {
+                                
+                                <span class="badge rounded-pill bg-danger">
+                                    @Html.DisplayFor(modelItem => item.Status.Description)
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge rounded-pill bg-warning">
+                                    @Html.DisplayFor(modelItem => item.Status.Description)
+                                </span>
+                            }
+
+                        </td>
+                        <td>
+                            <div class="input-group-lg">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+                                        Action
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-divider"></li>
+                                        <li class="dropdown-item">
+                                            <a asp-action="Edit" asp-route-id="@item.Id">
+                                                <i class="fa fa-edit text-primary"></i> Edit
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a asp-action="Details" asp-route-id="@item.Id">
+                                                <i class="fa fa-eye text-warning"></i> View
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a asp-action="Delete" asp-route-id="@item.Id">
+                                                <i class="fa fa-trash text-danger"></i> Delete
+                                            </a>
+                                        </li>
+                                        @if(item.Status.Code == "AwaitingApproval")
+                                        {
+                                            <li class="dropdown-item">
+                                                <a asp-action="ApproveLeave" asp-route-id="@item.Id">
+                                                    <i class="fa fa-check text-success"></i> Approve
+                                                </a>
+                                            </li>
+                                        }
+                                       
+                                            <li class="dropdown-item">
+                                                <a asp-action="RejectLeave" asp-route-id="@item.Id">
+                                                    <i class="fa fa-times text-danger"></i> Reject
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
