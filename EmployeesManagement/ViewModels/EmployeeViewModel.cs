@@ -103,8 +103,47 @@ namespace EmployeesManagement.ViewModels
         [DisplayName("Disability Certificate")]
         public string? DisabilityCertificate { get; set; }
 
+        [DisplayName("Employee Name")]
+        public int EmployeeId {get; set; }
+        
+        [DisplayName("Document Name")]
+        public string DocumentName { get; set; }
+        
+        [DisplayName("File Path")]
+        public string FilePath { get; set; }
+       
+        [DisplayName("Document Type")]     
+        public int DocumentTypeId { get; set; }
+        
+        [DisplayName("File Extension")]        
+        public string FileExtension { get; set; }
+        
+        [DisplayName("File Size")]        
+        public long FileSize { get; set; }
+        
+        [DisplayName("File Type")]      
+        public string FileType { get; set; }
+       
+        [DisplayName("Uploaded On")]
+        public DateTime UploadDate { get; set; }
 
-        public Employee Employee { get; set; }
+        [DisplayName("Attachment")]      
+        public string Attachment { get; set; }
+        
+        [DisplayName("Expiry On")]
+        public DateTime? ExpiryDate { get; set; }
         public List<Employee> Employees { get; set; }
+
+        public EmployeeDocument Document { get; set; }
+        public List<EmployeeDocument> EmployeeDocuments { get; set; }
+
+        public EmployeeNextOfKin NextOfKin { get; set; }
+        public List<EmployeeNextOfKin> EmployeeNextOfKins { get; set; }
+
+        public EmployeeContract Contract { get; set; }
+        public List<EmployeeContract> EmployeeContracts { get; set; }
+
+        public EmployeeHistory History { get; set; }
+        public List<EmployeeHistory> EmployeeHistories { get; set; }
     }
 }

@@ -52,8 +52,10 @@ namespace EmployeesManagement.Data
         public DbSet<WorkFlowUserGroup> WorkFlowUserGroups { get; set; }
         public DbSet<WorkFlowUserGroupMember> WorkFlowUserGroupMembers { get; set; }
         public DbSet<ApprovalsUserMetrix> ApprovalsUserMetrixs { get; set; }
-
-
+        public DbSet<EmployeeDocument> EmployeeDocuments { get; set; } // your Employee table
+        public DbSet<EmployeeNextOfKin> EmployeeNextOfKins { get; set; } // your Employee table
+        public DbSet<EmployeeContract> EmployeeContracts { get; set; } // your Employee table
+        public DbSet<EmployeeHistory> EmployeeHistories { get; set; } // your Employee table
         public virtual async Task<int> SaveChangesAsync(string userId = null)
         {
             OnBeforeSavingChanges(userId);

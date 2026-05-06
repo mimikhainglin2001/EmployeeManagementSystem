@@ -21,13 +21,15 @@ namespace EmployeesManagement.Controllers
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly IExtensionService _extensionService;
+        private readonly IWebHostEnvironment _env;
 
-        public EmployeesController(ApplicationDbContext context, IConfiguration configuration, IExtensionService extensionService, IMapper mapper)
+        public EmployeesController(ApplicationDbContext context, IConfiguration configuration, IExtensionService extensionService, IMapper mapper, IWebHostEnvironment env)
         {
             _context = context;
             _configuration = configuration;
             _extensionService = extensionService;
             _mapper = mapper;
+            _env = env;
         }
 
         // GET: Employees
@@ -66,6 +68,101 @@ namespace EmployeesManagement.Controllers
             return View(employees);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> AddEmployeeDocument(int id)
+        {
+            var employee = await _context.Employees.Where(x => x.Id == id).FirstOrDefaultAsync();
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var vm = new EmployeeViewModel();
+            vm.Id = id;
+            vm.EmpNo = employee.EmpNo;
+            ViewData["DocumentTypeId"] = new SelectList(
+                _context.SystemCodeDetails
+                    .Include(x => x.SystemCode)
+                    .Where(x => x.SystemCode.Code == "EmployeeDocumentsTypes"),
+                "Id", "Description"
+            );
+        
+                   return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubmitEmployeeDocument(EmployeeViewModel vm, IFormFile employeeattachment)
+        {
+            try
+            {
+            
+            // Image
+           if (employeeattachment != null && employeeattachment.Length > 0)
+{
+    var uploadsFolder = Path.Combine(_env.WebRootPath, "EmpPhotos");
+
+    // Ensure folder exists
+    if (!Directory.Exists(uploadsFolder))
+    {
+        Directory.CreateDirectory(uploadsFolder);
+    }
+
+var fileName = $"Attachment{DateTime.Now:yyyyMMddHHmmss}_{vm.DocumentName}_{employeeattachment.FileName}";
+var filePath = Path.Combine(uploadsFolder, fileName);
+
+    using (var stream = new FileStream(filePath, FileMode.Create))
+    {
+        await employeeattachment.CopyToAsync(stream);
+    }
+
+    vm.DocumentName = fileName;
+}
+    var empdocument = new EmployeeDocument
+    {
+        DocumentName = vm.DocumentName,
+        DocumentTypeId = vm.DocumentTypeId,
+        EmployeeId = vm.Id,
+        FileExtension = Path.GetExtension(vm.DocumentName),
+        FileSize = employeeattachment.Length,
+        FileType = employeeattachment.ContentType,
+        FilePath = Path.Combine(_configuration["FileSettings:UploadFolder"]!, vm.DocumentName),
+        UploadDate = DateTime.Now,
+        ExpiryDate = vm.ExpiryDate,
+        CreatedById = User.GetUserId(),
+        CreatedOn = DateTime.Now
+    };
+
+            var userid = User.GetUserId();
+            _context.Add(empdocument);
+                await _context.SaveChangesAsync(userid);
+                TempData["Message"] = "Employee Document attached successfully";
+                return RedirectToAction(nameof(Index));
+        }
+            catch(Exception ex)
+            {
+                TempData["Error"] = "Employee Document could not be attached successfully"+ ex.Message;
+
+                return RedirectToAction(nameof(Index));
+            }
+            }
+
+        [HttpGet]
+public async Task<IActionResult> EmployeeDocuments(EmployeeViewModel vm, int? id)
+        {
+            if (vm.Id == null)
+            {
+                return NotFound();
+            }
+            vm.EmployeeDocuments = new();
+            vm.EmployeeDocuments = await _context.EmployeeDocuments
+                .Include(x => x.DocumentType)
+                .Include(x => x.CreatedBy)
+                .Include(x => x.Employee)
+                .Where(m => m.EmployeeId == vm.Id)
+                .ToListAsync();
+
+            return View(vm);
+        }
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -130,15 +227,26 @@ namespace EmployeesManagement.Controllers
             employee.EmpNo = await _extensionService.GenerateEmployeeNumber(); //autogenerate
             
             // Image
-            if (employeephoto.Length > 0)
-            {
-                var fileName = "EmployeePhoto_" + DateTime.Now.ToString("yyymmddhhmmss")+"_"+employeephoto.FileName;
-                var path = _configuration["FileSettings:UploadFolder"]!; // appsetting.json
-                var filePath = Path.Combine(path, fileName);
-                var stream = new FileStream(filePath, FileMode.Create);
-                await employeephoto.CopyToAsync(stream);
-                employee.Photo = fileName;
-            }
+           if (employeephoto != null && employeephoto.Length > 0)
+{
+    var uploadsFolder = Path.Combine(_env.WebRootPath, "EmpPhotos");
+
+    // Ensure folder exists
+    if (!Directory.Exists(uploadsFolder))
+    {
+        Directory.CreateDirectory(uploadsFolder);
+    }
+
+    var fileName = $"EmployeePhoto_{DateTime.Now:yyyyMMddHHmmss}_{employeephoto.FileName}";
+    var filePath = Path.Combine(uploadsFolder, fileName);
+
+    using (var stream = new FileStream(filePath, FileMode.Create))
+    {
+        await employeephoto.CopyToAsync(stream);
+    }
+
+    employee.Photo = fileName;
+}
 
             var statusId = await _context.SystemCodeDetails
                     .Include(x => x.SystemCode)

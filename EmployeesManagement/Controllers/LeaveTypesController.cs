@@ -59,33 +59,55 @@ namespace EmployeesManagement.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(LeaveType leaveType)
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Create(LeaveType leaveType)
+{
+    try
+    {
+        // Remove navigation properties that can break ModelState validation
+        ModelState.Remove("CreatedBy");
+        ModelState.Remove("ModifiedBy");
+
+        if (!ModelState.IsValid)
         {
-            try
-            {
-
-                if (ModelState.IsValid)
-                {
-                    var Userid = User.GetUserId();
-                    leaveType.CreatedById = Userid;
-                    leaveType.CreatedOn = DateTime.Now;
-                    _context.Add(leaveType);
-                    await _context.SaveChangesAsync(Userid);
-
-                    TempData["Message"] = "Leave Type Created Successfully";
-
-                    return RedirectToAction(nameof(Index));
-                }
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Error creating Leave Type" + ex.Message;
-
-                return View(leaveType);
-            }
             return View(leaveType);
         }
+
+        // Ensure user is logged in
+        if (!User.Identity.IsAuthenticated)
+        {
+            return Unauthorized();
+        }
+
+        var userId = User.GetUserId();
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            throw new Exception("User ID could not be retrieved.");
+        }
+
+        // Audit fields
+        leaveType.CreatedById = userId;
+        leaveType.CreatedOn = DateTime.Now;
+
+        // Add entity
+        _context.LeaveTypes.Add(leaveType);
+
+        // Save changes (use standard EF Core method unless you REALLY need custom one)
+        await _context.SaveChangesAsync();
+
+        TempData["Message"] = "Leave Type created successfully.";
+
+        return RedirectToAction(nameof(Index));
+    }
+    catch (Exception ex)
+    {
+        // Log full error for debugging
+        TempData["Error"] = "Error creating Leave Type: " + ex.Message;
+
+        return View(leaveType);
+    }
+}
 
         // GET: LeaveTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)

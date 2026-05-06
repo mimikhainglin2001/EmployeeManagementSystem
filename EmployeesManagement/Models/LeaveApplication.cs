@@ -23,9 +23,9 @@ namespace EmployeesManagement.Models
 
         [Required]
         [Display(Name = "End Date")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyy/MM/dd}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
 
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         
         [Display(Name = "Leave Duration")]

@@ -1,5 +1,4 @@
 ﻿using EmployeesManagement.Data;
-using EmployeesManagement.Migrations;
 using EmployeesManagement.Models;
 using EmployeesManagement.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +16,15 @@ namespace EmployeesManagement.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _env;
 
 
-        public LeaveApplicationsController(ApplicationDbContext context, IConfiguration configuration)
+
+        public LeaveApplicationsController(ApplicationDbContext context, IConfiguration configuration, IWebHostEnvironment env)
         {
             _context = context;
             _configuration = configuration;
+            _env = env;
         }
 
         public async Task<IActionResult> Index()
@@ -105,6 +107,119 @@ namespace EmployeesManagement.Controllers
             ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name");
             return View();
         }
+
+        // POST: LeaveApplications/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+   [HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Create(LeaveApplication leaveApplication, IFormFile leaveattachment)
+{
+    try
+    {
+        // ✅ FIX: Remove fields not posted from form
+        ModelState.Remove(nameof(LeaveApplication.StatusId));
+        ModelState.Remove(nameof(LeaveApplication.EndDate));
+        ModelState.Remove(nameof(LeaveApplication.CreatedBy));
+        ModelState.Remove(nameof(LeaveApplication.Employee));
+        ModelState.Remove(nameof(LeaveApplication.LeaveType));
+        ModelState.Remove(nameof(LeaveApplication.Status));
+
+        // 🔍 DEBUG (optional – you can remove later)
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage)
+                .ToList();
+
+            TempData["Error"] = string.Join(" | ", errors);
+
+            ViewData["DurationId"] = new SelectList(
+                _context.SystemCodeDetails.Include(x => x.SystemCode)
+                .Where(y => y.SystemCode.Code == "LeaveDuration"),
+                "Id", "Description", leaveApplication.DurationId);
+
+            ViewData["EmployeeId"] = new SelectList(
+                _context.Employees, "Id", "FullName", leaveApplication.EmployeeId);
+
+            ViewData["LeaveTypeId"] = new SelectList(
+                _context.LeaveTypes, "Id", "Name", leaveApplication.LeaveTypeId);
+
+            return View(leaveApplication);
+        }
+
+        // ✅ FIX: Get logged-in user (standard way)
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(userId))
+            throw new Exception("User not logged in");
+
+        // ✅ File Upload
+        if (leaveattachment != null && leaveattachment.Length > 0)
+        {
+            var uploadsFolder = Path.Combine(_env.WebRootPath, "LeaveAttachments");
+
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            var fileName = $"Leave_{DateTime.Now:yyyyMMddHHmmss}_{Path.GetFileName(leaveattachment.FileName)}";
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await leaveattachment.CopyToAsync(stream);
+            }
+
+            leaveApplication.Attachment = fileName;
+        }
+
+        // ✅ Calculate End Date
+        leaveApplication.EndDate =
+            leaveApplication.StartDate.AddDays(leaveApplication.NoOfDays - 1);
+
+        // ✅ FIX: Get status safely
+        var pendingStatus = await _context.SystemCodeDetails
+            .Include(x => x.SystemCode)
+            .FirstOrDefaultAsync(x =>
+                x.SystemCode.Code == "LeaveApprovalStatus" &&
+                (x.Code == "Pending" || x.Code == "AwaitingApproval"));
+
+        if (pendingStatus == null)
+            throw new Exception("Pending/AwaitingApproval status not found in DB");
+
+        // ✅ Set system fields
+        leaveApplication.CreatedOn = DateTime.Now;
+        leaveApplication.CreatedById = userId;
+        leaveApplication.StatusId = pendingStatus.Id;
+
+        // ✅ Save
+        _context.LeaveApplications.Add(leaveApplication);
+        await _context.SaveChangesAsync();
+
+        TempData["Message"] = "Leave Application created successfully";
+        return RedirectToAction(nameof(Index));
+    }
+    catch (Exception ex)
+    {
+        TempData["Error"] = ex.Message;
+
+        // Reload dropdowns
+        ViewData["DurationId"] = new SelectList(
+            _context.SystemCodeDetails.Include(x => x.SystemCode)
+            .Where(y => y.SystemCode.Code == "LeaveDuration"),
+            "Id", "Description", leaveApplication.DurationId);
+
+        ViewData["EmployeeId"] = new SelectList(
+            _context.Employees, "Id", "FullName", leaveApplication.EmployeeId);
+
+        ViewData["LeaveTypeId"] = new SelectList(
+            _context.LeaveTypes, "Id", "Name", leaveApplication.LeaveTypeId);
+
+        return View(leaveApplication);
+    }
+}
+
         [HttpGet]
         public async Task<IActionResult> ApproveLeave(int? id)
         {
@@ -269,97 +384,7 @@ namespace EmployeesManagement.Controllers
             return View(leave);
         }
 
-        // POST: LeaveApplications/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(LeaveApplication leaveApplication, IFormFile leaveattachment)
-        {
-            try
-            {
-
-
-                if (leaveattachment != null && leaveattachment.Length > 0)
-                {
-                    var fileName = "LeaveAttachment" + DateTime.Now.ToString("yyymmddhhmmss") + "_" + leaveattachment.FileName;
-                    var path = _configuration["FileSettings:UploadFolder"]!; // appsetting.json
-                    var filePath = Path.Combine(path, fileName);
-                    var stream = new FileStream(filePath, FileMode.Create);
-                    await leaveattachment.CopyToAsync(stream);
-                    leaveApplication.Attachment = fileName;
-                }
-                leaveApplication.EndDate = leaveApplication.StartDate.AddDays(leaveApplication.NoOfDays);
-                // Get Pending status correctly with await
-                var pendingStatus = await _context.SystemCodeDetails
-                    .Include(x => x.SystemCode)
-                    .Where(y => y.Code == "AwaitingApproval" && y.SystemCode.Code == "LeaveApprovalStatus")
-                    .FirstOrDefaultAsync();
-
-                var userid = User.GetUserId();
-                leaveApplication.CreatedOn = DateTime.Now;
-                leaveApplication.CreatedById = userid;
-                leaveApplication.StatusId = pendingStatus.Id;
-                leaveApplication.NoOfDays = (leaveApplication.EndDate - leaveApplication.StartDate).Days + 1;
-
-                _context.Add(leaveApplication);
-                await _context.SaveChangesAsync(userid);
-
-                // Leave Type
-                var documenttype = await _context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "DocumentTypes" && x.Code == "LeaveApplication").FirstOrDefaultAsync();
-
-                // Wrokflow UserGroup
-                var usergroup = await _context.ApprovalsUserMetrixs.Where(x => x.UserId == userid && x.DocumentTypeId == documenttype.Id && x.Active == true).FirstOrDefaultAsync();
-                var awaitingapproval = await _context.SystemCodeDetails
-                    .Include(x => x.SystemCode)
-                    .Where(y => y.Code == "AwaitingApproval" && y.SystemCode.Code == "LeaveApprovalStatus")
-                    .FirstOrDefaultAsync();
-                var approvers = await _context.WorkFlowUserGroupMembers.Where(x => x.WorkFlowUserGroupId == usergroup.WorkflowUserGroupId && x.SenderId == userid).ToListAsync();
-                foreach (var approver in approvers)
-                {
-                    // Generate AN Approval Entries
-
-                    var approvalentries = new ApprovalEntry()
-                    {
-                        ApproverId = approver.ApproverId,
-                        DateSentForApproval = DateTime.Now,
-                        LastModifiedOn = DateTime.Now,
-                        LastModifiedById = approver.SenderId,
-                        RecordId = leaveApplication.Id,
-                        ControllerName = "LeaveApplications",
-                        DocumentTypeId = documenttype.Id,
-                        SequenceNo = approver.SequenceNo,
-                        StatusId = awaitingapproval.Id,
-                        Comments = "Sent for Approval"
-                    };
-                    _context.Add(approvalentries);
-                }
-                await _context.SaveChangesAsync(userid);
-                TempData["Message"] = "Leave Application created successfully";
-                return RedirectToAction(nameof(Index));
-
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "An error occured while creating Leave application" + ex.Message;
-                return View(leaveApplication);
-
-            }
-
-
-            // Repopulate dropdowns
-            ViewData["DurationId"] = new SelectList(
-            _context.SystemCodeDetails.Include(x => x.SystemCode)
-                    .Where(y => y.SystemCode.Code == "LeaveDuration"),
-                "Id", "Description", leaveApplication.DurationId);
-
-            ViewData["EmployeeId"] = new SelectList(
-                _context.Employees, "Id", "FullName", leaveApplication.EmployeeId);
-
-            ViewData["LeaveTypeId"] = new SelectList(
-                _context.LeaveTypes, "Id", "Name", leaveApplication.LeaveTypeId);
-
-        }
+        
 
         // GET: LeaveApplications/Edit/5
         public async Task<IActionResult> Edit(int? id)

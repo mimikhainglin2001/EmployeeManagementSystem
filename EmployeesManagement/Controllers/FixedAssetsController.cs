@@ -1,5 +1,4 @@
 ﻿using EmployeesManagement.Data;
-using EmployeesManagement.Migrations;
 using EmployeesManagement.Models;
 using EmployeesManagement.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -16,12 +15,15 @@ namespace EmployeesManagement.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _env;
 
 
-        public FixedAssetsController(ApplicationDbContext context, IConfiguration configuration)
+        public FixedAssetsController(ApplicationDbContext context, IConfiguration configuration, IWebHostEnvironment env)
+
         {
             _context = context;
             _configuration = configuration;
+            _env = env;
 
         }
 
@@ -72,16 +74,25 @@ namespace EmployeesManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(FixedAsset fixedAsset , IFormFile assetphoto)
         {
-            // Image
-            if (assetphoto != null && assetphoto.Length > 0)
+            
+             // ✅ File Upload image
+        if (assetphoto != null && assetphoto.Length > 0)
+        {
+            var uploadsFolder = Path.Combine(_env.WebRootPath, "AssetPhoto");
+
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            var fileName = $"Leave_{DateTime.Now:yyyyMMddHHmmss}_{Path.GetFileName(assetphoto.FileName)}";
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                var fileName = "AssetPhoto" + DateTime.Now.ToString("yyymmddhhmmss") + "_" + assetphoto.FileName;
-                var path = _configuration["FileSettings:UploadFolder"]!; // appsetting.json
-                var filePath = Path.Combine(path, fileName);
-                var stream = new FileStream(filePath, FileMode.Create);
                 await assetphoto.CopyToAsync(stream);
-                fixedAsset.Photo = fileName;
             }
+
+            fixedAsset.Photo = fileName;
+        }
             var fixedassetstatus = await _context.SystemCodeDetails
                     .Include(x => x.SystemCode)
                     .Where(x => x.SystemCode.Code == "AssetStatus"

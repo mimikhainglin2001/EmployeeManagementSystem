@@ -17,7 +17,10 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="EmployeeId" class="control-label"></label>
-                        <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
+                        <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId">
+                                                    <option value="">-- Select Employee --</option>
+
+                        </select>
                     </div>
                 </div>
 
@@ -32,7 +35,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="StartDate" class="control-label"></label>
-                        <input asp-for="StartDate" class="form-control" />
+                        <input asp-for="StartDate" type = "date" class="form-control" />
                         <span asp-validation-for="StartDate" class="text-danger"></span>
                     </div>
                 </div>
@@ -48,14 +51,20 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="DurationId" class="control-label"></label>
-                        <select asp-for="DurationId" class="form-control" asp-items="ViewBag.DurationId"></select>
+                        <select asp-for="DurationId" class="form-control" asp-items="ViewBag.DurationId">
+                                                    <option value="">-- Select Duration --</option>
+
+                        </select>
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="LeaveTypeId" class="control-label"></label>
-                        <select asp-for="LeaveTypeId" class="form-control" asp-items="ViewBag.LeaveTypeId"></select>
+                        <select asp-for="LeaveTypeId" class="form-control" asp-items="ViewBag.LeaveTypeId">
+                                                    <option value="">-- Select Leave Type --</option>
+
+                        </select>
                     </div>
                 </div>
 

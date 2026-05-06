@@ -17,3 +17,69 @@ input[type="number"] {
 .highcharts-description {
     margin: 0.3rem 10px;
 }
+
+/* =========================
+   HR TABS FIX
+========================= */
+/* .hr-tabs {
+    justify-content: center;
+    gap: 15px;
+} */
+.nav.nav-pills.hr-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px; /* replaces gap-4 safely */
+    
+}
+
+/* FORCE OVERRIDE BOOTSTRAP */
+.nav.nav-pills.hr-tabs .nav-link {
+    display: inline-flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 120px;
+    height: 90px;
+
+    border-radius: 12px !important;
+    background: #f8f9fa !important;
+
+    margin: 0 !important;
+
+    color: #444 !important;
+    font-weight: 500;
+
+    border: none !important;
+
+    text-align: center;
+
+    transition: all 0.25s ease-in-out !important;
+    cursor: pointer;
+}
+
+/* ICON */
+.nav.nav-pills.hr-tabs .nav-link i {
+    font-size: 20px;
+    margin-bottom: 5px;
+    transition: transform 0.25s ease-in-out;
+}
+
+/* HOVER */
+.nav.nav-pills.hr-tabs .nav-link:hover {
+    background: #e9f0ff !important;
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* ICON HOVER */
+.nav.nav-pills.hr-tabs .nav-link:hover i {
+    transform: scale(1.2);
+}
+
+/* ACTIVE TAB */
+.nav.nav-pills.hr-tabs .nav-link.active {
+    background: #0d6efd !important;
+    color: #fff !important;
+    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.3);
+}

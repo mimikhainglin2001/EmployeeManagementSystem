@@ -8,7 +8,7 @@ namespace EmployeesManagement.Models
         public string? CreatedById { get; set; }
 
         [DisplayName("Created By")]
-        public ApplicationUser CreatedBy { get; set; }
+        public ApplicationUser? CreatedBy { get; set; }
 
         [DisplayName("Created On")]
         public DateTime CreatedOn { get; set; }
@@ -17,7 +17,7 @@ namespace EmployeesManagement.Models
         public string? ModifiedById { get; set; }
 
         [DisplayName("Modified By")]
-        public ApplicationUser ModifiedBy { get; set; }
+        public ApplicationUser? ModifiedBy { get; set; }
 
         [DisplayName("Modified On")]
         public DateTime? ModifiedOn { get; set; }   // FIX
@@ -29,7 +29,7 @@ namespace EmployeesManagement.Models
         public string? ApprovedById { get; set; }
 
         [DisplayName("Approved By")]
-        public ApplicationUser ApprovedBy { get; set; }
+        public ApplicationUser? ApprovedBy { get; set; }
 
         [DisplayName("Approved On")]
         public DateTime? ApprovedOn { get; set; }   // FIX

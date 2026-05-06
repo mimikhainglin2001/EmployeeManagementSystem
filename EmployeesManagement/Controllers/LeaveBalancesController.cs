@@ -1,5 +1,4 @@
 ﻿using EmployeesManagement.Data;
-using EmployeesManagement.Migrations;
 using EmployeesManagement.Models;
 using EmployeesManagement.Services;
 using Microsoft.AspNetCore.Mvc;

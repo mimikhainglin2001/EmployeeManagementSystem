@@ -4,6 +4,7 @@ using EmployeesManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeesManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260428043433_EmployeeDocuments")]
+    partial class EmployeeDocuments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -730,77 +733,6 @@ namespace EmployeesManagement.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("EmployeesManagement.Models.EmployeeContract", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ContractFilePath")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ContractTitle")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("ContractTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedById")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("CurrencyTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("ModifiedById")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("ProbationperiodMonths")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Salary")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("TermsAndConditions")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContractTypeId");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("CurrencyTypeId");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("ModifiedById");
-
-                    b.ToTable("EmployeeContracts");
-                });
-
             modelBuilder.Entity("EmployeesManagement.Models.EmployeeDocument", b =>
                 {
                     b.Property<int>("Id")
@@ -863,133 +795,6 @@ namespace EmployeesManagement.Migrations
                     b.HasIndex("ModifiedById");
 
                     b.ToTable("EmployeeDocuments");
-                });
-
-            modelBuilder.Entity("EmployeesManagement.Models.EmployeeHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ChangeTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedById")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("EffectiveDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ModifiedById")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("NewDepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("NewDesignationId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("NewSalary")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<int?>("OldDepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("OldDesignationId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("OldSalary")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChangeTypeId");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("ModifiedById");
-
-                    b.HasIndex("NewDepartmentId");
-
-                    b.HasIndex("NewDesignationId");
-
-                    b.HasIndex("OldDepartmentId");
-
-                    b.HasIndex("OldDesignationId");
-
-                    b.ToTable("EmployeeHistories");
-                });
-
-            modelBuilder.Entity("EmployeesManagement.Models.EmployeeNextOfKin", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedById")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ModifiedById")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Occupation")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("RelationshipId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("ModifiedById");
-
-                    b.HasIndex("RelationshipId");
-
-                    b.ToTable("EmployeeNextOfKins");
                 });
 
             modelBuilder.Entity("EmployeesManagement.Models.FixedAsset", b =>
@@ -2001,47 +1806,6 @@ namespace EmployeesManagement.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("EmployeesManagement.Models.EmployeeContract", b =>
-                {
-                    b.HasOne("EmployeesManagement.Models.SystemCodeDetail", "ContractType")
-                        .WithMany()
-                        .HasForeignKey("ContractTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.SystemCodeDetail", "CurrencyType")
-                        .WithMany()
-                        .HasForeignKey("CurrencyTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EmployeesManagement.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("ContractType");
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("CurrencyType");
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("ModifiedBy");
-                });
-
             modelBuilder.Entity("EmployeesManagement.Models.EmployeeDocument", b =>
                 {
                     b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
@@ -2073,100 +1837,6 @@ namespace EmployeesManagement.Migrations
                     b.Navigation("Employee");
 
                     b.Navigation("ModifiedBy");
-                });
-
-            modelBuilder.Entity("EmployeesManagement.Models.EmployeeHistory", b =>
-                {
-                    b.HasOne("EmployeesManagement.Models.SystemCodeDetail", "ChangeType")
-                        .WithMany()
-                        .HasForeignKey("ChangeTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.Department", "NewDepartment")
-                        .WithMany()
-                        .HasForeignKey("NewDepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.Designation", "NewDesignation")
-                        .WithMany()
-                        .HasForeignKey("NewDesignationId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.Department", "OldDepartment")
-                        .WithMany()
-                        .HasForeignKey("OldDepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.Designation", "OldDesignation")
-                        .WithMany()
-                        .HasForeignKey("OldDesignationId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("ChangeType");
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("ModifiedBy");
-
-                    b.Navigation("NewDepartment");
-
-                    b.Navigation("NewDesignation");
-
-                    b.Navigation("OldDepartment");
-
-                    b.Navigation("OldDesignation");
-                });
-
-            modelBuilder.Entity("EmployeesManagement.Models.EmployeeNextOfKin", b =>
-                {
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.SystemCodeDetail", "Relationship")
-                        .WithMany()
-                        .HasForeignKey("RelationshipId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("ModifiedBy");
-
-                    b.Navigation("Relationship");
                 });
 
             modelBuilder.Entity("EmployeesManagement.Models.FixedAsset", b =>

@@ -5,12 +5,24 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using EmployeesManagement.Profiles;
 using EmployeesManagement.Services;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add DbContext with SQL Server
+// Add DbContext with MySQL
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException("Connection string 'DefaultConnection' was not found.");
+}
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseMySql(
+        connectionString,
+        // Avoid auto-detect at startup because it requires an immediate DB login.
+        // This keeps the app from hard-crashing during boot when credentials are wrong.
+        new MySqlServerVersion(new Version(8, 0, 36))
+    ));
 
 // Add Identity services
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
@@ -58,15 +70,25 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var logger = services.GetRequiredService<ILogger<Program>>();
 
-    string[] roles = { "Admin", "User" };
-
-    foreach (var role in roles)
+    try
     {
-        if (!await roleManager.RoleExistsAsync(role))
+        string[] roles = { "Admin", "User" };
+        foreach (var role in roles)
         {
-            await roleManager.CreateAsync(new IdentityRole(role));
+            if (!await roleManager.RoleExistsAsync(role))
+            {
+                await roleManager.CreateAsync(new IdentityRole(role));
+            }
         }
+    }
+    catch (Exception ex)
+    {
+        logger.LogWarning(
+            ex,
+            "Role initialization failed. Check MySQL credentials in appsettings.json -> ConnectionStrings:DefaultConnection."
+        );
     }
 }
 
